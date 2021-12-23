@@ -1,25 +1,31 @@
 import React from 'react'
 import BackArrow from '../components/BackArrow'
-import Checkbox from '../components/Checkbox'
+import Todo, { TodoProps } from '../components/Todo'
 import data from '../firebase'
-import { localUncompletedCount } from '../recoil'
 import { useParams } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { getTodoList, localUncompletedCount } from '../recoil'
 
 export default function TodoList() {
   const id = useParams().id as string
 
+  const [todos, setTodos] = useRecoilState(getTodoList(id))
+
   let checklist: Array<JSX.Element> = []
 
-  for (let item in data[id]) {
+  todos.forEach((item: TodoProps) => {
     checklist.push(
-      <Checkbox 
-        key={item} 
-        label={item}
-        id={data[id][item]}
+      <Todo 
+        key={item.id} 
+        label={item.label}
+        id={item.id}
+        parentID={id}
+        checked={item.checked}
       />
     )
-  }
+  })
+
+  console.log(todos)
 
   return (
     <div className="flex flex-col justify-center items-center min-w-full">
