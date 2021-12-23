@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { getTodoList, replaceItemAtIndex } from '../recoil'
+import { HiOutlineCog } from 'react-icons/hi'
 
 export interface TodoProps {
   id: string,
@@ -23,16 +24,29 @@ export default function Todo(props: TodoProps) {
     setTodos(newList);
   }
 
+  const checkedStyling = (checked: boolean, color: string) => {
+    if (checked)
+      return 'line-through text-tgray-400'
+    else
+      return 'none ' + color
+  }
+
   return (
-    <div className="w-full">
+    <div className="todo">
       <input 
-        name="checkbox"
+        name="todo"
         type="checkbox"
         checked={props.checked}
         onChange={handleChange}
         className="form-checkbox"
       />
-      <label htmlFor="checkbox" className={"mx-2 " + (props.checked ? 'line-through text-tgray-400' : 'none text-tbrown-900')}>{props.label}</label>
+      <label htmlFor="todo" className={"mx-2 " + checkedStyling(props.checked, 'text-tbrown-900')}>
+        {props.label}
+        <h2 className={"subheader text-xs " + checkedStyling(props.checked, 'text-tred-300')}>
+          Due 1/4/22
+        </h2>
+      </label>
+      <p className="icon absolute right-4"><HiOutlineCog /></p>
     </div>
   )
 }

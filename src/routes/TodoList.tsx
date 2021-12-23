@@ -11,10 +11,10 @@ export default function TodoList() {
 
   const [todos, setTodos] = useRecoilState(getTodoList(id))
 
-  let checklist: Array<JSX.Element> = []
+  let todoList: Array<JSX.Element> = []
 
   todos.forEach((item: TodoProps) => {
-    checklist.push(
+    todoList.push(
       <Todo 
         key={item.id} 
         label={item.label}
@@ -24,8 +24,6 @@ export default function TodoList() {
       />
     )
   })
-
-  console.log(todos)
 
   return (
     <div className="flex flex-col justify-center items-center min-w-full">
@@ -39,8 +37,8 @@ export default function TodoList() {
         {useRecoilValue(localUncompletedCount(id))} uncompleted tasks
       </h2>
 
-      <div className="flex flex-col w-4/5 h-72 px-5 pt-3 pb-12 rounded-sm bg-tred-50 drop-shadow-md mt-8">
-        {checklist}
+      <div className="flex flex-col w-5/6 max-h-min rounded-sm bg-tred-50 drop-shadow-md mt-8">
+        {todoList}
       </div>
     </div>
   )

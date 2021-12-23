@@ -8,8 +8,8 @@ import { HiOutlinePlusCircle } from 'react-icons/hi'
 export default function App() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-tgray-50">
-      <p className="icon top-3 right-3 text-2xl text-tbrown-900"><MdOutlineManageAccounts /></p>
-      <p className="icon bottom-2 right-2 text-2xl text-tbrown-900"><HiOutlinePlusCircle /></p>
+      <p className="icon top-3 right-3"><MdOutlineManageAccounts /></p>
+      <p className="icon bottom-2 right-2"><HiOutlinePlusCircle /></p>
 
       <h2 className="text-center text-xl mt-3 text-tred-300">
         welcome back, <b>preston</b>

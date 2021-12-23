@@ -13,6 +13,7 @@ module.exports = {
         teal: '#62929E',
         darkblue: '#546A7B',
         tred: colors.rose,
+        'tred-75': '#FEEAEA',
         tgray: colors.warmGray,
         tbrown: colors.amber,
         tgreen: colors.emerald
