@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useRecoilState } from 'recoil'
 import { getTodoList, replaceItemAtIndex } from '../recoil'
 import { HiOutlineCog } from 'react-icons/hi'
@@ -7,7 +7,16 @@ export interface TodoProps {
   id: string,
   parentID: string,
   label: string,
-  checked: boolean
+  checked: boolean,
+  dueDate: string
+}
+
+export function CreateTodo() {
+  return (
+    <div className="todo">
+      <input type="text" />
+    </div>
+  )
 }
 
 export default function Todo(props: TodoProps) {
@@ -43,7 +52,7 @@ export default function Todo(props: TodoProps) {
       <label htmlFor="todo" className={"mx-2 " + checkedStyling(props.checked, 'text-tbrown-900')}>
         {props.label}
         <h2 className={"subheader text-xs " + checkedStyling(props.checked, 'text-tred-300')}>
-          Due 1/4/22
+          Due {props.dueDate}
         </h2>
       </label>
       <p className="icon absolute right-4"><HiOutlineCog /></p>

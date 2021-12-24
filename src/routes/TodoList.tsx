@@ -1,15 +1,14 @@
 import React from 'react'
 import BackArrow from '../components/BackArrow'
-import Todo, { TodoProps } from '../components/Todo'
-import data from '../firebase'
+import Todo, { TodoProps, CreateTodo } from '../components/Todo'
 import { useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { getTodoList, localUncompletedCount } from '../recoil'
+import { getAddState, getTodoList, localUncompletedCount } from '../recoil'
 
 export default function TodoList() {
   const id = useParams().id as string
 
-  const [todos, setTodos] = useRecoilState(getTodoList(id))
+  const [todos] = useRecoilState(getTodoList(id))
 
   let todoList: Array<JSX.Element> = []
 
@@ -21,9 +20,12 @@ export default function TodoList() {
         id={item.id}
         parentID={id}
         checked={item.checked}
+        dueDate={item.dueDate}
       />
     )
   })
+
+  const addState = useRecoilValue(getAddState(id))
 
   return (
     <div className="flex flex-col justify-center items-center min-w-full">
@@ -39,6 +41,7 @@ export default function TodoList() {
 
       <div className="flex flex-col w-5/6 max-h-min rounded-sm bg-tred-50 drop-shadow-md mt-8">
         {todoList}
+        {addState ? <CreateTodo /> : <></>}
       </div>
     </div>
   )

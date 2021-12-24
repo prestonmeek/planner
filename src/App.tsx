@@ -1,22 +1,22 @@
 import React from 'react'
 import Categories from './routes/Categories'
 import TodoList from './routes/TodoList'
+import AddButton from './components/AddButton'
 import { Routes, Route } from 'react-router-dom'
 import { MdOutlineManageAccounts } from 'react-icons/md'
-import { HiOutlinePlusCircle } from 'react-icons/hi'
 
 export default function App() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-tgray-50">
       <p className="icon top-3 right-3"><MdOutlineManageAccounts /></p>
-      <p className="icon bottom-2 right-2"><HiOutlinePlusCircle /></p>
+      <AddButton />
 
       <h2 className="text-center text-xl mt-3 text-tred-300">
         welcome back, <b>preston</b>
       </h2>
 
       <Routes>
-        <Route path="/" element={<Categories />} />
+        <Route path="*" element={<Categories />} />
         <Route path="/todo/:id" element={<TodoList />} />
       </Routes>
     </div>
