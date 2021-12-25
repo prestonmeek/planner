@@ -1,5 +1,5 @@
 import data from '../firebase'
-import { TodoProps } from '../components/Todo'
+import { TodoData, TodoState } from '../components/Todo'
 import { RecoilState, atom, selector, RecoilValueReadOnly } from 'recoil'
 import memoize from 'memoizee'
 
@@ -10,8 +10,8 @@ export const getCategories = memoize(function(): RecoilState<string[]> {
     })
 })
 
-export const getTodoList = memoize(function(todoID: string): RecoilState<TodoProps[]> {
-    let res: Array<TodoProps> = []
+export const getTodoList = memoize(function(todoID: string): RecoilState<TodoData[]> {
+    let res: Array<TodoData> = []
 
     for (let key in data[todoID]) {
         const { id, dueDate } = data[todoID][key]
@@ -21,7 +21,8 @@ export const getTodoList = memoize(function(todoID: string): RecoilState<TodoPro
             parentID: id,
             label: key,
             checked: false,
-            dueDate: dueDate
+            dueDate: dueDate,
+            state: TodoState.Default
         })
     }
 
@@ -37,7 +38,7 @@ export const localUncompletedCount = memoize(function(todoID: string): RecoilVal
         get: ({ get }) => {
             let count = 0
 
-            get(getTodoList(todoID)).forEach((item: TodoProps) => {
+            get(getTodoList(todoID)).forEach((item: TodoData) => {
                 if (!item.checked)
                     count++
             })
