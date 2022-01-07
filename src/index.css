@@ -10,6 +10,12 @@
     }
     */
 
+    input[type="text"] {
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+
     .category {
         @apply pt-4 w-60 h-36 rounded bg-tred-100 drop-shadow-md hover:scale-110 hover:z-10 transition-all;
     }
@@ -38,17 +44,13 @@
         @apply pb-3;
     }
 
-    .todo .icon {
-        display: none;
-    }
-
-    .todo:hover .icon {
-        display: initial;
-    }
-
     .form-checkbox {
-        @apply border border-tbrown-800 cursor-pointer hover:border-tred-300 checked:bg-tred-400;
+        @apply border border-tbrown-800 hover:border-tbrown-550 focus:border-tbrown-800 focus:hover:border-tbrown-550 cursor-pointer;
         @apply w-6 h-6;
         border-radius: 100%;
+    }
+
+    .form-checkbox:checked {
+        @apply border-none focus:border-none bg-tred-400 hover:bg-tred-350;
     }
 }

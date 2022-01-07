@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import BackArrow from '../components/BackArrow'
 import Todo, { TodoProps } from '../components/Todo'
 import { getTodoList, localUncompletedCount } from '../recoil'
@@ -22,6 +22,12 @@ export default function TodoList() {
     )
   })
 
+  const todoListRef = useRef<null | HTMLDivElement>(null)
+
+  useEffect(() => {
+      todoListRef!.current!.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
   return (
     <div className="flex flex-col justify-center items-center min-w-full">
       <BackArrow />
@@ -34,7 +40,7 @@ export default function TodoList() {
         {useRecoilValue(localUncompletedCount(id))} uncompleted tasks
       </h2>
 
-      <div className="flex flex-col w-5/6 max-h-min rounded-sm bg-tred-50 drop-shadow-md mt-8">
+      <div ref={todoListRef} className="flex flex-col w-5/6 max-h-min rounded-sm bg-tred-50 drop-shadow-md my-8">
         {todoList}
       </div>
     </div>

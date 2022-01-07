@@ -14,8 +14,10 @@ module.exports = {
         darkblue: '#546A7B',
         tred: colors.rose,
         'tred-75': '#FEEAEA',
+        'tred-350': '#FC8293',
         tgray: colors.warmGray,
         tbrown: colors.amber,
+        'tbrown-550': '#DF7F07',
         tgreen: colors.emerald
       }
     },

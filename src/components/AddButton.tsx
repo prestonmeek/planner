@@ -16,10 +16,10 @@ export default function PlusButton() {
   const handleClick = () => {
     // If we are on a TodoList page
     if (path[0] === 'todo' && todoID)
-      handleTodoList(todoID)
+      addTodo(todoID)
   }
 
-  const handleTodoList = (todoID: string) => {
+  const addTodo = (todoID: string) => {
     setTodos((oldTodos) => [
       ...oldTodos,
       {
@@ -27,7 +27,7 @@ export default function PlusButton() {
         parentID: todoID,
         label: '',
         checked: false,
-        dueDate: 'No due date',
+        dueDate: 'tomorrow',
         state: TodoState.Editing
       },
     ]);
