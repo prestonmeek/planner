@@ -59,6 +59,7 @@
     "@tailwindcss/custom-forms": "^0.2.1",
     "autoprefixer": "^9.8.8",
     "electron": "^16.0.1",
+    "firebase": "^9.6.5",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   }

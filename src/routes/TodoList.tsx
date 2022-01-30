@@ -1,26 +1,20 @@
 import React, { useEffect, useRef } from 'react'
 import BackArrow from '../components/BackArrow'
-import Todo, { TodoProps } from '../components/Todo'
+import Todo from '../components/Todo'
 import { getTodoList, localUncompletedCount } from '../recoil'
 import { useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { getDBTodos } from '../firebase'
 
 export default function TodoList() {
   const id = useParams().id as string
 
   const [todos, setTodos] = useRecoilState(getTodoList(id))
 
-  let todoList: Array<JSX.Element> = []
-
-  todos.forEach((item: TodoProps) => {
-    todoList.push(
-      <Todo 
-        key={item.id} 
-        id={item.id}
-        parentID={id}
-      />
-    )
-  })
+  // Fetch firestore data
+  useEffect(() => {
+    getDBTodos(id).then(todos => setTodos(todos))
+  }, [id, setTodos])
 
   const todoListRef = useRef<null | HTMLDivElement>(null)
 
@@ -41,7 +35,7 @@ export default function TodoList() {
       </h2>
 
       <div ref={todoListRef} className="flex flex-col w-5/6 max-h-min rounded-sm bg-tred-50 drop-shadow-md my-8">
-        {todoList}
+        {todos.map(todo => <Todo key={todo.id} id={todo.id} parentID={id} />)}
       </div>
     </div>
   )

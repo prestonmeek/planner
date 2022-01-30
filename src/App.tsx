@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Categories from './routes/Categories'
 import TodoList from './routes/TodoList'
 import AddButton from './components/AddButton'
 import { Routes, Route } from 'react-router-dom'
 import { MdOutlineManageAccounts } from 'react-icons/md'
+import { useRecoilCallback, useRecoilState } from 'recoil'
+import { getCategories, getTodoList } from './recoil'
+import { getDBCategories, getDBTodos } from './firebase'
 
 export default function App() {
+  const [categories, setCategories] = useRecoilState(getCategories())
+
+  // Preload all the necessary firestore data
+  useEffect(() => {
+    getDBCategories().then(categories => setCategories(categories))
+  }, [setCategories])
+
+  useRecoilCallback(({ set }) => () => {
+    categories.forEach(async category => set(getTodoList(category), await getDBTodos(category)))
+  })()
+  
   return (
     <div className="flex flex-col items-center min-h-screen bg-tgray-50">
       <p className="icon top-3 right-3"><MdOutlineManageAccounts /></p>

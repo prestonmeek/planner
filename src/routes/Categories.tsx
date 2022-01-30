@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Category from '../components/Category'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { getCategories, globalUncompletedCount } from '../recoil'
+import { getDBCategories } from '../firebase'
 
 export default function Categories() {
-  let categories: Array<JSX.Element> = []
+  const [categories, setCategories] = useRecoilState(getCategories())
 
-
-  useRecoilValue(getCategories()).forEach((item: string) => {
-    categories.push(<Category key={item} id={item} />)
-  })
+  // Fetch firestore data
+  useEffect(() => {
+    getDBCategories().then(categories => setCategories(categories))
+  }, [setCategories])
 
   return (
     <div>
@@ -22,7 +23,7 @@ export default function Categories() {
       </h2>
 
       <div className="grid grid-cols-2 mt-12 gap-2">
-        {categories}
+        {categories.map(item => <Category key={item} id={item} />)}
       </div>
     </div>
   )

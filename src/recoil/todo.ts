@@ -1,34 +1,18 @@
-import data from '../firebase'
-import { TodoData, TodoState } from '../components/Todo'
+import { TodoData } from '../components/Todo'
 import { RecoilState, atom, selector, RecoilValueReadOnly } from 'recoil'
 import memoize from 'memoizee'
 
 export const getCategories = memoize(function(): RecoilState<string[]> {
     return atom({
         key: 'categories',
-        default: Object.keys(data)
+        default: [] as string[]
     })
 })
 
 export const getTodoList = memoize(function(todoID: string): RecoilState<TodoData[]> {
-    let res: Array<TodoData> = []
-
-    for (let key in data[todoID]) {
-        const { id, dueDate } = data[todoID][key]
-
-        res.push({
-            id: id,
-            parentID: id,
-            label: key,
-            checked: false,
-            dueDate: dueDate,
-            state: TodoState.Default
-        })
-    }
-
     return atom({
         key: `todoList.${todoID}`,
-        default: res
+        default: [] as TodoData[]
     })
 })
 
