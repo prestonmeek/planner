@@ -1,5 +1,5 @@
 import { FirebaseApp, FirebaseOptions, initializeApp } from 'firebase/app'
-import { getFirestore, doc, getDoc, Firestore } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, onSnapshot, Firestore, DocumentData } from 'firebase/firestore'
 import uniqid from 'uniqid'
 import { TodoData, TodoState } from '../components/Todo'
 
@@ -13,45 +13,30 @@ const firebaseConfig: FirebaseOptions = {
 }
 
 const app: FirebaseApp = initializeApp(firebaseConfig)
-const db: Firestore    = getFirestore(app);
 
-// Get all the category names from the database
-export async function getDBCategories(): Promise<string[]> {
-    return new Promise(async resolve => {
-        const snapshot = await getDoc(doc(db, 'todos', 'categories'))
+export const db: Firestore = getFirestore(app);
 
-        if (snapshot.exists()) {
-            const categories: string[] = Object.keys(snapshot.data()).sort()
-
-            resolve(categories)
-        }
-    })
+export function getSortedCategories(data: DocumentData): string[] {
+    return Object.keys(data).sort()
 }
 
-export async function getDBTodos(category: string): Promise<TodoData[]> {
-    return new Promise(async resolve => {
-        const snapshot = await getDoc(doc(db, 'todos', 'categories'))
+export function getDBTodos(data: DocumentData, category: string): TodoData[] {
+    const todos = data[category]
 
-        if (snapshot.exists()) {
-            const todos = snapshot.data()[category]
+    let tempTodos: TodoData[] = []
 
-            let tempTodos: TodoData[] = []
+    for (let label in todos) {
+        const todo = todos[label]
 
-            for (let label in todos) {
-                const todo = todos[label]
+        tempTodos.push({
+            id: todo.id,
+            parentID: category,
+            label: label,
+            checked: todo.checked,
+            dueDate: todo.dueDate,
+            state: TodoState.Default
+        })
+    }
 
-                tempTodos.push({
-                    id: todo.id,
-                    parentID: category,
-                    label: label,
-                    checked: todo.checked,
-                    dueDate: todo.dueDate,
-                    state: TodoState.Default
-                })
-            }
-
-            // Sort the todos by the time they were added to the database
-            resolve(tempTodos.sort((a, b) => (todos[a.label].timeAdded.valueOf() > todos[b.label].timeAdded.valueOf()) ? 1 : -1))
-        }
-    })
+    return tempTodos
 }

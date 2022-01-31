@@ -1,24 +1,39 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Categories from './routes/Categories'
 import TodoList from './routes/TodoList'
 import AddButton from './components/AddButton'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { MdOutlineManageAccounts } from 'react-icons/md'
 import { useRecoilCallback, useRecoilState } from 'recoil'
 import { getCategories, getTodoList } from './recoil'
-import { getDBCategories, getDBTodos } from './firebase'
+import { db, getDBTodos, getSortedCategories } from './firebase'
+import { doc, DocumentData, onSnapshot } from 'firebase/firestore'
 
 export default function App() {
   const [categories, setCategories] = useRecoilState(getCategories())
 
-  // Preload all the necessary firestore data
-  useEffect(() => {
-    getDBCategories().then(categories => setCategories(categories))
-  }, [setCategories])
+  // Update the actual todo data based on the categories
+  const updateTodoLists = useRecoilCallback(({ set }) => (data: DocumentData, categories: string[]) => {
+    categories.forEach(category => set(getTodoList(category), getDBTodos(data, category)))
+  }, [])
 
-  useRecoilCallback(({ set }) => () => {
-    categories.forEach(async category => set(getTodoList(category), await getDBTodos(category)))
-  })()
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, 'todos', 'categories'), doc => {
+      if (doc.exists()) {
+        const data = doc.data()
+  
+        // Update the categories atom
+        const categories: string[] = getSortedCategories(data)
+        setCategories(categories)
+
+        console.log('ok')
+
+        updateTodoLists(data, categories)
+      }
+      
+      return () => unsubscribe()
+    })
+  }, [])
   
   return (
     <div className="flex flex-col items-center min-h-screen bg-tgray-50">

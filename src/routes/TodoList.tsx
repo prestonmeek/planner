@@ -11,11 +11,6 @@ export default function TodoList() {
 
   const [todos, setTodos] = useRecoilState(getTodoList(id))
 
-  // Fetch firestore data
-  useEffect(() => {
-    getDBTodos(id).then(todos => setTodos(todos))
-  }, [id, setTodos])
-
   const todoListRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {

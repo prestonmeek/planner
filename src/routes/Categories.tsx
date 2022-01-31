@@ -2,15 +2,9 @@ import React, { useEffect } from 'react'
 import Category from '../components/Category'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { getCategories, globalUncompletedCount } from '../recoil'
-import { getDBCategories } from '../firebase'
 
 export default function Categories() {
   const [categories, setCategories] = useRecoilState(getCategories())
-
-  // Fetch firestore data
-  useEffect(() => {
-    getDBCategories().then(categories => setCategories(categories))
-  }, [setCategories])
 
   return (
     <div>
